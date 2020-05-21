@@ -19,6 +19,8 @@ import java.time.LocalDateTime;
 @Table(name = "orders")
 public class Order {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String orderId;
     private String pickUpAddress;
