@@ -29,6 +29,10 @@ public class Status {
 
     private LocalDateTime updatedAt = LocalDateTime.now();
 
+    public Status(ORDER_STATUS status) {
+        this.orderStatus = status;
+    }
+
     @PreUpdate
     private void changeUpdatedDate(){ this.updatedAt = LocalDateTime.now(); }
 }
