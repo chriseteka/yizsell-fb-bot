@@ -6,11 +6,125 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="1" author="chris_eteka">
-        <createTable tableName="test">
-            <column name="id" type="INTEGER" autoIncrement="1" generationType="AUTO">
-                <constraints primaryKey="true" primaryKeyName="test_table_PK" unique="true" />
+
+<!--        BUSINESS TABLE CREATION -->
+        <createTable tableName="businesses">
+            <column name="id" type="INTEGER" autoIncrement="true" generationType="AUTO">
+                <constraints unique="true" primaryKeyName="businesses_PK" primaryKey="true" />
             </column>
-            <column name="full_name" type="VARCHAR(100)" />
+            <column name="name" type="VARCHAR(100)" defaultOnNull="true" defaultValue="Nil" />
+            <column name="address" type="VARCHAR(255)" defaultOnNull="true" defaultValue="Nil" />
+            <column name="email" type="VARCHAR(100)">
+                <constraints unique="true" nullable="false" />
+            </column>
+            <column name="number" type="VARCHAR(15)" defaultOnNull="true" defaultValue="Nil" />
+        </createTable>
+
+<!--        CUSTOMER TABLE CREATION -->
+        <createTable tableName="customers">
+            <column name="id" type="INTEGER" autoIncrement="true" generationType="AUTO">
+                <constraints unique="true" primaryKeyName="customers_PK" primaryKey="true" />
+            </column>
+            <column name="name" type="VARCHAR(100)" defaultOnNull="true" defaultValue="Nil" />
+            <column name="email" type="VARCHAR(100)">
+                <constraints unique="true" nullable="false" />
+            </column>
+            <column name="number" type="VARCHAR(15)" defaultOnNull="true" defaultValue="Nil" />
+        </createTable>
+
+<!--        ORDER ITEM TABLE CREATION -->
+        <createTable tableName="order_items">
+            <column name="id" type="INTEGER" autoIncrement="true" generationType="AUTO">
+                <constraints unique="true" primaryKeyName="order_items_PK" primaryKey="true" />
+            </column>
+            <column name="quantity" type="INTEGER" defaultOnNull="true" defaultValue="0" />
+        </createTable>
+
+<!--        STATUS TABLE CREATION -->
+        <createTable tableName="statuses">
+            <column name="id" type="INTEGER" autoIncrement="true" generationType="AUTO">
+                <constraints unique="true" primaryKeyName="statuses_PK" primaryKey="true" />
+            </column>
+            <column name="order_status" type="VARCHAR(255)" defaultOnNull="true" defaultValue="Nil" />
+            <column name="updated_at" type="DATETIME" defaultOnNull="true" defaultValue="NOW()" />
+        </createTable>
+
+<!--        ORDER TABLE CREATION -->
+        <createTable tableName="orders">
+            <column name="id" type="INTEGER" autoIncrement="true" generationType="AUTO">
+                <constraints unique="true" primaryKeyName="orders_PK" primaryKey="true" />
+            </column>
+            <column name="order_id" type="VARCHAR(15)">
+                <constraints unique="true" nullable="false" uniqueConstraintName="order_id_UK" />
+            </column>
+            <column name="pick_up_address" type="VARCHAR(255)" defaultOnNull="true" defaultValue="Nil" />
+            <column name="order_date" type="DATETIME" defaultOnNull="true" defaultValue="NOW()" />
+            <column name="order_status" type="INTEGER">
+                <constraints nullable="false" referencedTableName="statuses" referencedColumnNames="id"
+                             foreignKeyName="order_status_FK" unique="false" />
+            </column>
+            <column name="order_item" type="INTEGER">
+                <constraints nullable="false" referencedTableName="order_items" referencedColumnNames="id"
+                             foreignKeyName="order_item_FK" unique="false" />
+            </column>
+        </createTable>
+
+<!--        STOCK TABLE CREATION -->
+        <createTable tableName="stocks">
+            <column name="id" type="INTEGER" autoIncrement="true" generationType="AUTO">
+                <constraints unique="true" primaryKeyName="stocks_PK" primaryKey="true" />
+            </column>
+            <column name="item_name" type="VARCHAR(150)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        
+<!--        JOIN TABLE FOR STOCK AND BUSINESSES -->
+        <createTable tableName="stock_owners">
+            <column name="stock_id" type="INTEGER">
+                <constraints foreignKeyName="stock_owners_stock_FK" nullable="false"
+                             referencedTableName="stocks" referencedColumnNames="id" unique="false" />
+            </column>
+            <column name="business_id" type="INTEGER">
+                <constraints foreignKeyName="stock_owners_business_FK" nullable="false"
+                             referencedTableName="businesses" referencedColumnNames="id" unique="false" />
+            </column>
+        </createTable>
+
+<!--        JOIN TABLE FOR ORDER ITEMS AND STOCKS -->
+        <createTable tableName="order_items_stocks">
+            <column name="order_item_id" type="INTEGER">
+                <constraints foreignKeyName="order_items_stocks_order_item_FK" nullable="false"
+                             referencedTableName="order_items" referencedColumnNames="id" unique="false" />
+            </column>
+            <column name="stock_id" type="INTEGER">
+                <constraints foreignKeyName="order_items_stocks_stock_FK" nullable="false"
+                             referencedTableName="stocks" referencedColumnNames="id" unique="false" />
+            </column>
+        </createTable>
+
+<!--        JOIN TABLE FOR ORDERS AND CUSTOMERS -->
+        <createTable tableName="customer_orders">
+            <column name="order_id" type="INTEGER">
+                <constraints foreignKeyName="customer_orders_order_FK" nullable="false"
+                             referencedTableName="orders" referencedColumnNames="id" unique="false" />
+            </column>
+            <column name="customer_id" type="INTEGER">
+                <constraints foreignKeyName="customer_orders_customer_FK" nullable="false"
+                             referencedTableName="customers" referencedColumnNames="id" unique="false" />
+            </column>
+        </createTable>
+
+<!--        JOIN TABLE FOR ORDERS AND BUSINESSES -->
+        <createTable tableName="business_orders">
+            <column name="order_id" type="INTEGER">
+                <constraints foreignKeyName="business_orders_order_FK" nullable="false"
+                             referencedTableName="orders" referencedColumnNames="id" unique="false" />
+            </column>
+            <column name="business_id" type="INTEGER">
+                <constraints foreignKeyName="business_orders_business_FK" nullable="false"
+                             referencedTableName="businesses" referencedColumnNames="id" unique="false" />
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>
