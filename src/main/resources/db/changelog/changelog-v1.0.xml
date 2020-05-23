@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="chris_eteka">
+        <createTable tableName="test">
+            <column name="id" type="INTEGER" autoIncrement="1" generationType="AUTO">
+                <constraints primaryKey="true" primaryKeyName="test_table_PK" unique="true" />
+            </column>
+            <column name="full_name" type="VARCHAR(100)" />
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
