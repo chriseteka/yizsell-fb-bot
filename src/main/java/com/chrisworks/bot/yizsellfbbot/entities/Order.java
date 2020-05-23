@@ -30,11 +30,7 @@ public class Order {
     @OneToOne
     private OrderItem orderItem;
     @ManyToOne
-    @JoinTable(name = "customerOrders", joinColumns = @JoinColumn(name = "orderId",
-            nullable = false), inverseJoinColumns = @JoinColumn(name = "customerId"))
     private Customer customer;
     @ManyToOne
-    @JoinTable(name = "businessOrders", joinColumns = @JoinColumn(name = "orderId",
-            nullable = false), inverseJoinColumns = @JoinColumn(name = "businessId"))
     private Business business;
 }

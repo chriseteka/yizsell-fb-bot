@@ -28,8 +28,5 @@ public class Stock {
 
     @JsonIgnore
     @ManyToOne
-    @JoinTable(name = "stockOwners", joinColumns = @JoinColumn(name = "stockId",
-            nullable = false), inverseJoinColumns = @JoinColumn(name = "businessId"))
-    @Column(nullable = false)
     private Business owner;
 }

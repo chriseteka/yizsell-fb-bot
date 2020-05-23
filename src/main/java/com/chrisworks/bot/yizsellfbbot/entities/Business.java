@@ -1,10 +1,12 @@
 package com.chrisworks.bot.yizsellfbbot.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * @author Chris_Eteka
@@ -25,4 +27,16 @@ public class Business {
     private String address;
     private String email;
     private String number;
+
+    @JsonIgnore
+    @OneToMany
+    @JoinTable(name = "businessOrders", joinColumns = @JoinColumn(name = "businessId",
+            nullable = false), inverseJoinColumns = @JoinColumn(name = "orderId"))
+    private Set<Order> orders;
+
+    @JsonIgnore
+    @OneToMany
+    @JoinTable(name = "stockOwners", joinColumns = @JoinColumn(name = "businessId",
+            nullable = false), inverseJoinColumns = @JoinColumn(name = "stockId"))
+    private Set<Stock> stocks;
 }
